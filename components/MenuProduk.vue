@@ -37,18 +37,21 @@
     <!-- Form khusus Ovale -->
     <div v-if="activeItem === 'Ovale' && selectedSubmenu" class="form-ovale mt-3">
       <label for="idOvale" class="form-label">Masukkan ID Ovale:</label>
-      <input
+      <form>
+        <input
         id="idOvale"
         type="text"
         v-model="idOvale"
         class="form-control mb-2"
         placeholder="Contoh: 123456789"
-      />
+        />
 
+      </form>
+      
       <button
         class="btn btn-success w-100"
-        :disabled="!idOvale"
-        @click="beliOvale"
+        @click.prevent="beliOvale"
+        type="button"
       >
         Beli {{ selectedSubmenu }}
       </button>

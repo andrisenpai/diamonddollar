@@ -41,7 +41,7 @@ const { data: items } = await useFetch('/api/carousel')
 
 <style scoped>
 .carousel-inner img {
-  height: 180px;
+  height: 250px;
   object-fit: cover;
   border-radius: 8px;
   box-shadow: 0 0 15px rgba(0, 255, 247, 0.2);
@@ -50,5 +50,8 @@ const { data: items } = await useFetch('/api/carousel')
   background-color: rgba(0, 0, 0, 0.5);
   padding: 0.75rem;
   border-radius: 0.5rem;
+}
+.carousel-control-prev, .carousel-control-next{
+  top: 55px!important;
 }
 </style>
