@@ -1,5 +1,5 @@
 <template>
-  <div id="carouselDashboard" class="carousel slide" data-bs-ride="carousel">
+  <div id="carouselDashboard" class="carousel slide" data-bs-ride="carousel" style="padding-top: 70px;">
     <div class="carousel-inner">
       <div
         v-for="(item, index) in items"

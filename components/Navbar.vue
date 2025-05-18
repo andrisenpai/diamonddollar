@@ -1,5 +1,5 @@
 <template>
-    <nav class="robot-navbar">
+    <nav class="robot-navbar fixed-top">
       <div class="nav-container">
         <span class="navbar-title">🤖 Shinchan App</span>
         <button
