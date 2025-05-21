@@ -4,7 +4,9 @@
         
         <span class="navbar-title">
           <img src="/images/logo.png" alt="Logo" class="logo drop-bounce" />
-          <span class="app-name drop-bounce">Shinchan App</span>
+          <span class="app-name wave-text">
+            <span v-for="(char, index) in 'Shinchan App'" :key="index">{{ char === ' ' ? '\u00A0' : char }}</span>
+          </span>
 
         </span>
 
@@ -76,16 +78,48 @@
     opacity: 0;
   }
 }
+.wave-text {
+  display: inline-block;
+  white-space: nowrap;
+  font-size: 1.4rem;
+  font-weight: bold;
+  letter-spacing: 0.08em;
+}
+
+.wave-text span {
+  display: inline-block;
+  animation: wave 2.5s ease-in-out infinite;
+}
+
+/* Delay bergelombang per huruf */
+.wave-text span:nth-child(1)  { animation-delay: 0s; }
+.wave-text span:nth-child(2)  { animation-delay: 0.1s; }
+.wave-text span:nth-child(3)  { animation-delay: 0.2s; }
+.wave-text span:nth-child(4)  { animation-delay: 0.3s; }
+.wave-text span:nth-child(5)  { animation-delay: 0.4s; }
+.wave-text span:nth-child(6)  { animation-delay: 0.5s; }
+.wave-text span:nth-child(7)  { animation-delay: 0.6s; }
+.wave-text span:nth-child(8)  { animation-delay: 0.7s; }
+.wave-text span:nth-child(9)  { animation-delay: 0.8s; }
+.wave-text span:nth-child(10) { animation-delay: 0.9s; }
+
+@keyframes wave {
+  0%   { transform: translateY(0); }
+  10%  { transform: translateY(-8px); }
+  20%  { transform: translateY(0); }
+  100% { transform: translateY(0); }
+}
+
 
   .robot-navbar {
     max-width: 500px;
-    margin: 0 auto;
+    margin: 5px 10px!important;
     background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
     color: #b1f2f7;
     font-family: 'Source Code Pro', monospace, monospace;
     box-shadow: 0 4px 15px rgba(0, 255, 240, 0.25);
     border-radius: 8px;
-    padding: 0.75rem 1rem;
+    padding: 0.25rem 1rem;
     user-select: none;
   }
   
@@ -167,7 +201,7 @@
   }
   
   .nav-link {
-    padding: 0.8rem 1.2rem;
+    padding: 0.5rem 1.2rem;
     color: #b1f2f7;
     text-decoration: none;
     font-weight: 600;

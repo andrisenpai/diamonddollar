@@ -48,10 +48,10 @@ const { data: items } = await useFetch('/api/carousel')
 }
 .carousel-caption {
   background-color: rgba(0, 0, 0, 0.5);
-  padding: 0.75rem;
+  padding: 0.5rem;
   border-radius: 0.5rem;
 }
 .carousel-control-prev, .carousel-control-next{
-  top: 55px!important;
+  top: 20px!important;
 }
 </style>

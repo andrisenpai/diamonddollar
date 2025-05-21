@@ -79,7 +79,7 @@
   </a>
 
   <button
-    class="btn btn-outline-danger w-100 mt-2"
+    class="btn btn-outline-danger w-100 mt-2 mb-5"
     @click="resetForm"
   >
     Reset
