@@ -30,14 +30,25 @@
         @click="onSubmenuClick(sub)"
         type="button"
       >
-        {{ sub }}
+      {{`${selectedSubmenu == 'custom' ? '' : 'Rp '}${sub}`}}
       </button>
     </div>
 
     <!-- Form khusus Ovale -->
     <div v-if="activeItem === 'Ovale' && selectedSubmenu" class="form-ovale mt-3">
-      <label for="idOvale" class="form-label">Masukkan ID Ovale:</label>
+      
       <form>
+        <label for="customPrice" class="form-label" v-if="selectedSubmenu == 'custom'">Masukkan IDR</label>
+        <input
+            type="text"
+            class="form-control mb-2"
+            v-model="customPrice"
+            id="customPrice"
+            v-if="selectedSubmenu == 'custom'"
+            placeholder="Contoh: 15000"
+        />
+
+        <label for="idOvale" class="form-label">Masukkan ID Ovale:</label>
         <input
         id="idOvale"
         type="text"
@@ -75,24 +86,31 @@ const produk = [
 ]
 const idOvale = ref('')
 const selectedSubmenu = ref('')
+const finalPrice = ref('')
+watch(()=> (selectedSubmenu, (newVal) => {
 
+}))
 const onSubmenuClick = (sub) => {
   selectedSubmenu.value = sub
 }
 
+const customPrice = ref('')
+
 const beliOvale = () => {
-  const harga = selectedSubmenu.value
+  const harga = selectedSubmenu.value === 'custom' ? customPrice.value : selectedSubmenu.value
   const id = idOvale.value.trim()
 
   if (!id) return alert('ID Ovale harus diisi.')
+  if (!harga) return alert('Harga custom harus diisi.')
 
   const message = `Hallo kaka, saya pesan koin dari shinchan.app seharga ${harga} dengan id Ovale ${id}. Berikut ini screenshoot bukti transfernya`
   const url = `https://wa.me/6285693282015?text=${encodeURIComponent(message)}`
   window.open(url, '_blank')
 }
 
+
 const submenuData = {
-  Ovale: ['Topup 10k', 'Topup 20k', 'Topup 50k'],
+  Ovale: ['10000', '20000', '30000', '100000', 'custom'],
   Hita: ['Paket A', 'Paket B'],
   'Mobile Legend': ['Skin A', 'Skin B', 'Skin C'],
   'Pubg Mobile': ['UC 100', 'UC 300'],
@@ -162,7 +180,7 @@ div.mt-4 {
   background: #122433; /* sedikit lebih terang dari bg */
   padding: 20px 30px;
   border-radius: 8px;
-  max-width: 320px;
+  max-width: 350px;
   width: 90%;
   box-shadow: 0 2px 10px rgba(0,0,0,0.7);
   font-family: var(--font-family);

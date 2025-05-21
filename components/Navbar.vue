@@ -1,7 +1,13 @@
 <template>
     <nav class="robot-navbar fixed-top">
       <div class="nav-container">
-        <span class="navbar-title">🤖 Shinchan App</span>
+        
+        <span class="navbar-title">
+          <img src="/images/logo.png" alt="Logo" class="logo drop-bounce" />
+          <span class="app-name drop-bounce">Shinchan App</span>
+
+        </span>
+
         <button
           class="menu-btn"
           @click="toggleMenu"
@@ -31,6 +37,46 @@
   </script>
   
   <style scoped>
+.logo {
+  width: 64px;
+  height: 64px;
+  margin-right: 5px;
+  vertical-align: middle;
+}
+
+/* Logo + teks efek drop-fade (drop-in + pause + fade-out) */
+.drop-bounce {
+  animation: dropFade 4s ease-in-out infinite;
+}
+
+/* Animasi drop + bounce + pause + fade out */
+@keyframes dropFade {
+  0% {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  10% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  15% {
+    transform: translateY(-10px);
+  }
+  20% {
+    transform: translateY(0);
+  }
+  60% {
+    /* Diam di posisi akhir, opacity penuh */
+    transform: translateY(0);
+    opacity: 1;
+  }
+  100% {
+    /* Fade out ke opacity 0 */
+    transform: translateY(0);
+    opacity: 0;
+  }
+}
+
   .robot-navbar {
     max-width: 500px;
     margin: 0 auto;
