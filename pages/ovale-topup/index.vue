@@ -46,7 +46,7 @@
   </select>
 
   <button
-    class="btn btn-success w-100"
+    class="btn btn-info w-100"
     type="submit"
     v-if="!showQR"
   >
