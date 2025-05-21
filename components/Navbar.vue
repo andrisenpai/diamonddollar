@@ -113,7 +113,7 @@
 
   .robot-navbar {
     max-width: 500px;
-    margin: 5px 10px!important;
+    margin: 5px auto!important;
     background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
     color: #b1f2f7;
     font-family: 'Source Code Pro', monospace, monospace;
