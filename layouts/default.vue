@@ -1,7 +1,7 @@
 <template>
   <div>
     <Navbar />
-    <NuxtPage />
+    <NuxtPage style="padding-top: 90px"/>
     <BottomNav />
   </div>
 </template>
