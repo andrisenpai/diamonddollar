@@ -28,14 +28,27 @@
       {{ nominal === 'custom' ? 'Custom' : `Rp ${nominal}` }}
     </button>
   </div>
+  <label>Pilih Mode Pembayaran:</label>
+<div class="mb-3">
+  <div class="form-check form-check-inline">
+    <input class="form-check-input" type="radio" v-model="paymentMode" value="manual" id="manual" />
+    <label class="form-check-label" for="manual">Manual</label>
+  </div>
+  <div class="form-check form-check-inline">
+    <input class="form-check-input" type="radio" v-model="paymentMode" value="otomatis" id="otomatis" />
+    <label class="form-check-label" for="otomatis">Otomatis (Midtrans)</label>
+  </div>
+</div>
 
-  <input
-    v-if="selectedNominal === 'custom'"
-    v-model="customPrice"
-    type="number"
-    class="form-control mb-3"
-    placeholder="Masukkan harga custom"
-  />
+<input
+  v-if="selectedNominal === 'custom'"
+  v-model="customPriceFormatted"
+  type="text"
+  class="form-control mb-3"
+  placeholder="Masukkan nominal custom"
+  @input="customPriceRaw = getRawNumber(customPriceFormatted)"
+/>
+
 
   <label>Metode Pembayaran:</label>
   <select v-model="selectedPayment" class="form-control mb-3">
@@ -45,16 +58,27 @@
     </option>
   </select>
 
-  <button
-    class="btn btn-info w-100"
-    type="submit"
-    v-if="!showQR"
-  >
-    Topup Sekarang
-  </button>
+  <!-- Tombol Topup Manual hanya jika mode manual -->
+<button
+  class="btn btn-info w-100"
+  type="submit"
+  v-if="paymentMode === 'manual' && !showQR"
+>
+  Topup Sekarang
+</button>
+
+<!-- Tombol Topup Otomatis -->
+<button
+  class="btn btn-info w-100"
+  type="submit"
+  v-if="paymentMode === 'otomatis'"
+>
+  Bayar Sekarang via Midtrans
+</button>
+
 </form>
 
-<div v-if="showQR" class="qr-section">
+<div v-if="showQR" class="qr-section" ref="qrSection">
   <h5>Pembayaran via {{ selectedPayment }}</h5>
   <img src="/icons/ovale.png" alt="QR Dummy" class="qr-img" />
   <p class="mt-2">Silakan transfer ke QR atau via informasi berikut:</p>
@@ -93,7 +117,16 @@
   
   <script setup>
   import { ref, computed } from 'vue'
+  import { useRupiahInput } from '~/composables/useRupiahInput'
+
+const {
+  rawValue: customPriceRaw,
+  formattedValue: customPriceFormatted,
+  getRawNumber
+} = useRupiahInput('')
+
   const selectedPayment = ref('')
+  const paymentMode = ref('manual') // default manual
 
   const paymentOptions = [
   { name: 'DANA' },
@@ -127,7 +160,10 @@ const paymentInfo = {
   const showQR = ref(false)
   
   const nominalList = ['10000', '20000', '50000', '100000', 'custom']
-  
+  watch(paymentMode, () => {
+  showQR.value = false
+})
+
   const selectNominal = (nominal) => {
     selectedNominal.value = nominal
     if (nominal !== 'custom') customPrice.value = ''
@@ -141,18 +177,67 @@ const paymentInfo = {
   return `https://wa.me/6285693282015?text=${encodeURIComponent(message)}`
 })
 
+const qrSection = ref(null)
   
-  const submitTopup = () => {
+const submitTopup = async () => {
   const nominal = selectedNominal.value === 'custom'
-    ? customPrice.value
-    : selectedNominal.value
+  ? parseInt(customPriceRaw.value)
+  : selectedNominal.value
 
+  if (!nominal || nominal < 10000) return alert('Nominal minimal Rp10.000!')
   if (!idOvale.value.trim()) return alert('ID Ovale harus diisi!')
   if (!nominal) return alert('Pilih nominal atau isi custom nominal!')
   if (!selectedPayment.value) return alert('Pilih metode pembayaran!')
 
-  showQR.value = true
+  if (paymentMode.value === 'manual') {
+    showQR.value = true
+  await nextTick()
+  qrSection.value?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  return
+  }
+
+  // Mode otomatis (Midtrans)
+  try {
+  
+const response = await $fetch('/api/payment', {
+  method: 'POST',
+  body: {
+    idOvale: idOvale.value,
+    nominal,
+    paymentMethod: selectedPayment.value
+  }
+})
+    console.log('Response Midtrans:', response)
+
+    if (!response.token) {
+      throw new Error('Token Midtrans tidak ditemukan')
+    }
+
+    window.snap.pay(response.token, {
+      onSuccess: function(result) {
+        alert('Pembayaran berhasil!')
+        console.log('Success:', result)
+        resetForm()
+      },
+      onPending: function(result) {
+        alert('Pembayaran belum selesai, silakan lanjutkan di Midtrans')
+        console.log('Pending:', result)
+      },
+      onError: function(result) {
+        alert('Pembayaran gagal, coba lagi nanti')
+        console.error('Error:', result)
+      },
+      onClose: function() {
+        console.log('User menutup popup pembayaran')
+      }
+    })
+  } catch (err) {
+    console.error('Gagal memproses Midtrans:', err)
+    alert('Gagal memproses pembayaran otomatis')
+  }
 }
+
+
 
   
   const resetForm = () => {

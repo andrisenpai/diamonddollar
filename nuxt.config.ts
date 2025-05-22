@@ -11,7 +11,11 @@ export default defineNuxtConfig({
         { name: "viewport", content: "width=device-width, initial-scale=1" },
         { name: "format-detection", content: "telephone=no" },
       ],
-      script: [],
+      script: [{
+        src: 'https://app.sandbox.midtrans.com/snap/snap.js',
+        'data-client-key': process.env.MIDTRANS_CLIENT_KEY, // ini diakses dari public runtime config nanti
+        type: 'text/javascript'
+      }]
     },
   },
   devtools: { enabled: true },
@@ -22,7 +26,12 @@ export default defineNuxtConfig({
     "@/assets/main.scss",
     '~/assets/_environment.scss'
   ],
-
+  runtimeConfig: {
+    midtransServerKey: process.env.MIDTRANS_SERVER_KEY,
+    public: {
+      midtransClientKey: process.env.MIDTRANS_CLIENT_KEY
+    }
+  },
   modules: [],
   ssr: false,
   vite: {
