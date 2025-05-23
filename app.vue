@@ -1,5 +1,6 @@
 <template>
   <div id="app-wrapper">
+    <FloatingSquare />
     <NuxtLayout />
   </div>
 </template>

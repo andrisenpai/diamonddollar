@@ -1,12 +1,12 @@
 <template>
     <nav class="bottom-navbar" role="navigation" aria-label="Bottom navigation">
-      <NuxtLink to="/" class="nav-item" aria-current="page" title="Home">
+      <NuxtLink to="/" class="nav-item" title="Home">
         <i class="bi bi-house-door-fill"></i>
         <span>Home</span>
       </NuxtLink>
       <NuxtLink to="/history" class="nav-item" title="Account">
         <i class="bi bi-clock-history"></i>
-        <span>Account</span>
+        <span>History</span>
       </NuxtLink>
     </nav>
   </template>
