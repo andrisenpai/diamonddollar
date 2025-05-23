@@ -1,21 +1,27 @@
+// server/api/webhook.ts
 import { saveTransaction } from '~/server/utils/transactionStore'
 
 export default defineEventHandler(async (event) => {
   const body = await readBody(event)
 
-  if (body.transaction_status === 'settlement' || body.transaction_status === 'pending') {
-    const maskedId = body.order_id.slice(-3).padStart(body.order_id.length, '*') // ***123
-    const nominal = Number(body.gross_amount)
+  // Cek status yang dianggap berhasil
+  if (
+    body.transaction_status === 'capture' || 
+    body.transaction_status === 'settlement' ||
+    body.transaction_status === 'pending'
+  ) {
+    // Format maskedId dari order_id (misal ***49be)
+    const maskedId = body.order_id.slice(-4).padStart(body.order_id.length, '*')
+
+    const nominal = Number(body.gross_amount) || 0
 
     await saveTransaction({
       id: body.order_id,
       maskedId,
       nominal,
       status: body.transaction_status,
-      time: new Date().toISOString()
+      time: body.transaction_time || new Date().toISOString()
     })
-
-    console.log('✅ Transaksi berhasil disimpan:', body.order_id)
   }
 
   return { success: true }
