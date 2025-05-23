@@ -4,12 +4,8 @@
         <i class="bi bi-house-door-fill"></i>
         <span>Home</span>
       </NuxtLink>
-      <NuxtLink to="/produk" class="nav-item" title="Products">
-        <i class="bi bi-box-seam"></i>
-        <span>Products</span>
-      </NuxtLink>
-      <NuxtLink to="/akun" class="nav-item" title="Account">
-        <i class="bi bi-person-fill"></i>
+      <NuxtLink to="/history" class="nav-item" title="Account">
+        <i class="bi bi-clock-history"></i>
         <span>Account</span>
       </NuxtLink>
     </nav>

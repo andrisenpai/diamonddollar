@@ -31,12 +31,12 @@
   <label>Pilih Mode Pembayaran:</label>
 <div class="mb-3">
   <div class="form-check form-check-inline">
-    <input class="form-check-input" type="radio" v-model="paymentMode" value="manual" id="manual" />
-    <label class="form-check-label" for="manual">Manual</label>
-  </div>
-  <div class="form-check form-check-inline">
     <input class="form-check-input" type="radio" v-model="paymentMode" value="otomatis" id="otomatis" />
     <label class="form-check-label" for="otomatis">Otomatis (Midtrans)</label>
+  </div>
+  <div class="form-check form-check-inline">
+    <input class="form-check-input" type="radio" v-model="paymentMode" value="manual" id="manual" />
+    <label class="form-check-label" for="manual">Manual</label>
   </div>
 </div>
 
@@ -58,14 +58,7 @@
     </option>
   </select>
 
-  <!-- Tombol Topup Manual hanya jika mode manual -->
-<button
-  class="btn btn-info w-100"
-  type="submit"
-  v-if="paymentMode === 'manual' && !showQR"
->
-  Topup Sekarang
-</button>
+  
 
 <!-- Tombol Topup Otomatis -->
 <button
@@ -75,7 +68,14 @@
 >
   Bayar Sekarang via Midtrans
 </button>
-
+<!-- Tombol Topup Manual hanya jika mode manual -->
+<button
+  class="btn btn-info w-100"
+  type="submit"
+  v-if="paymentMode === 'manual' && !showQR"
+>
+  Topup Sekarang
+</button>
 </form>
 
 <div v-if="showQR" class="qr-section" ref="qrSection">
@@ -126,7 +126,7 @@ const {
 } = useRupiahInput('')
 
   const selectedPayment = ref('')
-  const paymentMode = ref('manual') // default manual
+  const paymentMode = ref('otomatis') // default manual
 
   const paymentOptions = [
   { name: 'DANA' },
@@ -300,5 +300,31 @@ const response = await $fetch('/api/payment', {
     border: 2px solid #b1f2f7;
     border-radius: 8px;
   }
+  form {
+  background: #0a141e;
+  color: #b1f2f7;
+}
+
+input,
+select,
+textarea {
+  background-color: #0a141e;
+  color: #b1f2f7;
+  border: 1px solid #b1f2f7;
+}
+
+input::placeholder {
+  color: #b1f2f7aa;
+}
+
+.form-check-label,
+label {
+  color: #b1f2f7;
+}
+
+input[type="radio"] {
+  accent-color: #b1f2f7;
+}
+
   </style>
   

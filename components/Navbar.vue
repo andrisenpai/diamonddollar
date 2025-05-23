@@ -22,9 +22,14 @@
   
       <transition name="slide-fade">
         <div v-if="menuVisible" class="menu-list" role="menu">
-          <NuxtLink to="/" class="nav-link">🏠 Home</NuxtLink>
-          <NuxtLink to="/produk" class="nav-link">📦 Products</NuxtLink>
-          <NuxtLink to="/akun" class="nav-link">👤 Account</NuxtLink>
+          <NuxtLink to="/" class="nav-link" aria-current="page" title="Home">
+        <i class="bi bi-house-door-fill me-2"></i>
+        <span>Home</span>
+      </NuxtLink>
+      <NuxtLink to="/history" class="nav-link" title="Account">
+        <i class="bi bi-clock-history me-2"></i>
+        <span>History</span>
+      </NuxtLink>
         </div>
       </transition>
     </nav>
