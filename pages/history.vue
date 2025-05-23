@@ -17,10 +17,16 @@
   <script setup>
   const testimoniList = ref([])
 
-onMounted(async () => {
-  const { data } = await useFetch('/api/testimoni')
-  if (data.value?.data) testimoniList.value = data.value.data
+  onMounted(async () => {
+  try {
+    const { data } = await useFetch('/api/testimoni')
+    if (data.value?.data) testimoniList.value = data.value.data
+    else console.warn("Data kosong:", data.value)
+  } catch (e) {
+    console.error("Gagal fetch testimoni:", e)
+  }
 })
+
 
   </script>
   
