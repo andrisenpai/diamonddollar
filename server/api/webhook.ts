@@ -1,28 +1,24 @@
-// server/api/webhook.ts
-import { saveTransaction } from '~/server/utils/transactionStore'
+import { useSupabase } from '~/composables/useSupabase'
 
 export default defineEventHandler(async (event) => {
   const body = await readBody(event)
+  const supabase = useSupabase()
 
-  // Cek status yang dianggap berhasil
-  if (
-    body.transaction_status === 'capture' || 
-    body.transaction_status === 'settlement' ||
-    body.transaction_status === 'pending'
-  ) {
-    // Format maskedId dari order_id (misal ***49be)
-    const maskedId = body.order_id.slice(-4).padStart(body.order_id.length, '*')
+  const { order_id, transaction_status, payment_type, gross_amount } = body
 
-    const nominal = Number(body.gross_amount) || 0
+  const { error } = await supabase.from('transactions').upsert({
+    order_id,
+    status: transaction_status,
+    payment_type,
+    gross_amount,
+    created_at: new Date().toISOString()
+  })
 
-    await saveTransaction({
-      id: body.order_id,
-      maskedId,
-      nominal,
-      status: body.transaction_status,
-      time: body.transaction_time || new Date().toISOString()
-    })
+  if (error) {
+    console.error('Error saving transaction:', error)
+    setResponseStatus(event, 500)
+    return { isSuccessfull: false, message: 'Failed saving transaction' }
   }
 
-  return { success: true }
+  return { isSuccessfull: true, message: 'Transaction stored' }
 })
