@@ -39,27 +39,27 @@ export default defineEventHandler(async (event) => {
     console.warn('[Webhook] Signature mismatch!')
     return send(event, 'INVALID_SIGNATURE', 'text/plain')
   }
-  return send(event, 'OK', 'text/plain')
+
   // Step 2: Simpan ke Supabase
-  // try {
-  //   const supabase = useSupabase()
-  //   const { error, data } = await supabase.from('transactions').upsert({
-  //     order_id,
-  //     status: transaction_status,
-  //     payment_type,
-  //     gross_amount: grossAmountStr,
-  //     created_at: new Date().toISOString(),
-  //   })
+  try {
+    const supabase = useSupabase()
+    const { error, data } = await supabase.from('transactions').upsert({
+      order_id,
+      status: transaction_status,
+      payment_type,
+      gross_amount: grossAmountStr,
+      created_at: new Date().toISOString(),
+    })
 
-  //   if (error) {
-  //     console.error('[Webhook] Supabase Error:', error)
-  //   } else {
-  //     console.log('[Webhook] Supabase Success:', data)
-  //   }
+    if (error) {
+      console.error('[Webhook] Supabase Error:', error)
+    } else {
+      console.log('[Webhook] Supabase Success:', data)
+    }
 
-  //   return send(event, 'OK', 'text/plain') // Midtrans expects plain text OK
-  // } catch (err) {
-  //   console.error('[Webhook] Handler Error:', err)
-  //   return send(event, 'OK', 'text/plain') // Tetap return OK agar Midtrans tidak retry
-  // }
+    return send(event, 'OK', 'text/plain') // Midtrans expects plain text OK
+  } catch (err) {
+    console.error('[Webhook] Handler Error:', err)
+    return send(event, 'OK', 'text/plain') // Tetap return OK agar Midtrans tidak retry
+  }
 })
