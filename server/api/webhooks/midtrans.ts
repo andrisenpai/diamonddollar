@@ -4,11 +4,9 @@ import { useSupabase } from '~/composables/useSupabase'
 
 export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig()
-  const supabase = useSupabase()
-
   const body = await readBody(event)
 
-  console.log('[Webhook] Midtrans Payload Received')
+  console.log('[Webhook] Midtrans Payload:', body)
 
   const {
     order_id,
@@ -19,18 +17,14 @@ export default defineEventHandler(async (event) => {
     payment_type,
   } = body || {}
 
-  // Validasi field penting
   if (!order_id || !status_code || !gross_amount || !incomingSignature) {
     console.warn('[Webhook] Missing fields in payload')
     return send(event, 'INVALID_PAYLOAD', 'text/plain')
   }
 
-  // Pastikan gross_amount string
-  const grossAmountStr = typeof gross_amount === 'string'
-    ? gross_amount
-    : String(gross_amount)
+  const grossAmountStr = typeof gross_amount === 'string' ? gross_amount : String(gross_amount)
 
-  // Verifikasi Signature
+  // Verifikasi signature
   const serverKey = config.midtransServerKey || ''
   const rawSignature = order_id + status_code + grossAmountStr + serverKey
   const calculatedSignature = crypto.createHash('sha512').update(rawSignature).digest('hex')
@@ -44,40 +38,24 @@ export default defineEventHandler(async (event) => {
     return send(event, 'INVALID_SIGNATURE', 'text/plain')
   }
 
-  // Ambil user_id dari transaksi yang sudah dibuat sebelumnya
-  const { data: existing, error: lookupError } = await supabase
+  const supabase = useSupabase()
+
+  // Update transaksi berdasarkan order_id
+  const { error } = await supabase
     .from('transactions')
-    .select('user_id')
+    .update({
+      status: transaction_status,
+      payment_type,
+      gross_amount: grossAmountStr,
+      updated_at: new Date().toISOString(),
+    })
     .eq('order_id', order_id)
-    .single()
 
-  if (lookupError || !existing?.user_id) {
-    console.warn('[Webhook] User ID not found for order_id:', order_id)
-    return send(event, 'USER_NOT_FOUND', 'text/plain')
+  if (error) {
+    console.error('[Webhook] Supabase Update Error:', error)
+  } else {
+    console.log('[Webhook] Supabase Update Success for order_id:', order_id)
   }
 
-  // Upsert status terbaru
-  try {
-    const { error: upsertError, data: upsertData } = await supabase
-      .from('transactions')
-      .upsert({
-        order_id,
-        user_id: existing.user_id,
-        status: transaction_status,
-        payment_type,
-        gross_amount: grossAmountStr,
-        created_at: new Date().toISOString(),
-      })
-
-    if (upsertError) {
-      console.error('[Webhook] Supabase Upsert Error:', upsertError)
-    } else {
-      console.log('[Webhook] Supabase Upsert Success for order_id:', order_id)
-    }
-
-    return send(event, 'OK', 'text/plain')
-  } catch (err) {
-    console.error('[Webhook] Handler Exception:', err)
-    return send(event, 'OK', 'text/plain') // tetap OK agar Midtrans tidak retry
-  }
+  return send(event, 'OK', 'text/plain') // supaya Midtrans gak retry
 })
