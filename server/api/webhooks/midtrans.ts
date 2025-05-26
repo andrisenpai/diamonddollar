@@ -1,6 +1,6 @@
 import crypto from 'crypto'
-import { send } from 'h3'
 import { useSupabase } from '~/composables/useSupabase'
+import { send } from 'h3'
 
 export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig()
@@ -17,6 +17,7 @@ export default defineEventHandler(async (event) => {
     payment_type,
   } = body || {}
 
+  // Validasi field penting
   if (!order_id || !status_code || !gross_amount || !incomingSignature) {
     console.warn('[Webhook] Missing fields in payload')
     return send(event, 'INVALID_PAYLOAD', 'text/plain')
@@ -38,24 +39,26 @@ export default defineEventHandler(async (event) => {
     return send(event, 'INVALID_SIGNATURE', 'text/plain')
   }
 
-  const supabase = useSupabase()
-
-  // Update transaksi berdasarkan order_id
-  const { error } = await supabase
-    .from('transactions')
-    .update({
+  // Update transaksi di Supabase (upsert agar aman)
+  try {
+    const supabase = useSupabase()
+    const { error, data } = await supabase.from('transactions').upsert({
+      order_id,
       status: transaction_status,
       payment_type,
       gross_amount: grossAmountStr,
-      updated_at: new Date().toISOString(),
-    })
-    .eq('order_id', order_id)
+      updated_at: new Date().toISOString()
+    }, { onConflict: 'order_id' })
 
-  if (error) {
-    console.error('[Webhook] Supabase Update Error:', error)
-  } else {
-    console.log('[Webhook] Supabase Update Success for order_id:', order_id)
+    if (error) {
+      console.error('[Webhook] Supabase Error:', error)
+    } else {
+      console.log('[Webhook] Supabase Update Success for order_id:', order_id)
+    }
+
+    return send(event, 'OK', 'text/plain')
+  } catch (err) {
+    console.error('[Webhook] Handler Error:', err)
+    return send(event, 'OK', 'text/plain') // Tetap OK agar Midtrans tidak retry
   }
-
-  return send(event, 'OK', 'text/plain') // supaya Midtrans gak retry
 })

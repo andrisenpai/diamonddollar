@@ -1,8 +1,9 @@
 import midtransClient from 'midtrans-client'
 import { v4 as uuidv4 } from 'uuid'
+import { useSupabase } from '~/composables/useSupabase'
+import { sendError } from 'h3'
 
 export default defineEventHandler(async (event) => {
-  // Hanya izinkan POST
   if (event.node.req.method !== 'POST') {
     return sendError(event, createError({ statusCode: 405, statusMessage: 'Method Not Allowed' }))
   }
@@ -20,9 +21,11 @@ export default defineEventHandler(async (event) => {
     serverKey: process.env.MIDTRANS_SERVER_KEY
   })
 
+  const orderId = 'TOPUP-' + uuidv4()
+
   const baseParams = {
     transaction_details: {
-      order_id: 'TOPUP-' + uuidv4(),
+      order_id: orderId,
       gross_amount: parsedNominal
     },
     item_details: [{
@@ -41,7 +44,6 @@ export default defineEventHandler(async (event) => {
   switch (paymentMethod.toLowerCase()) {
     case 'ovo':
     case 'dana':
-      // NOTE: Sandbox Midtrans biasanya handle ini via QRIS
       transactionParams = {
         ...baseParams,
         payment_type: 'qris'
@@ -51,22 +53,17 @@ export default defineEventHandler(async (event) => {
       transactionParams = {
         ...baseParams,
         payment_type: 'bank_transfer',
-        bank_transfer: {
-          bank: 'mandiri'
-        }
+        bank_transfer: { bank: 'mandiri' }
       }
       break
     case 'bank bca':
       transactionParams = {
         ...baseParams,
         payment_type: 'bank_transfer',
-        bank_transfer: {
-          bank: 'bca'
-        }
+        bank_transfer: { bank: 'bca' }
       }
       break
     default:
-      // fallback ke QRIS kalau metode tidak dikenali
       transactionParams = {
         ...baseParams,
         payment_type: 'qris'
@@ -76,6 +73,23 @@ export default defineEventHandler(async (event) => {
 
   try {
     const transaction = await snap.createTransaction(transactionParams)
+
+    const supabase = useSupabase()
+    const { error } = await supabase.from('transactions').insert({
+      order_id: orderId,
+      status: 'pending',
+      payment_type: transactionParams.payment_type,
+      gross_amount: parsedNominal,
+      phone_number: idOvale, // bisa diganti sesuai data unik
+      created_at: new Date().toISOString()
+    })
+
+    if (error) {
+      console.error('[Insert Transaction] Supabase Error:', error)
+    } else {
+      console.log('[Insert Transaction] Supabase Success for order_id:', orderId)
+    }
+
     return { token: transaction.token }
   } catch (error) {
     console.error('Midtrans Error:', error)
