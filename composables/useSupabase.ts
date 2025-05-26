@@ -1,9 +1,8 @@
-// ~/composables/useSupabase.ts
 import { createClient } from '@supabase/supabase-js'
 
 const supabaseUrl = process.env.SUPABASE_URL!
-const supabaseAnonKey = process.env.SUPABASE_ANON_KEY!
+const supabaseServiceRole = process.env.SUPABASE_SERVICE_ROLE!
 
 export const useSupabase = () => {
-  return createClient(supabaseUrl, supabaseAnonKey)
+  return createClient(supabaseUrl, supabaseServiceRole)
 }
