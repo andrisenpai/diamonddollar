@@ -199,14 +199,16 @@ const submitTopup = async () => {
   // Mode otomatis (Midtrans)
   try {
   
-const response = await $fetch('/api/payment', {
+    const response = await $fetch('/api/payment', {
   method: 'POST',
   body: {
     idOvale: idOvale.value,
     nominal,
-    paymentMethod: selectedPayment.value
+    paymentMethod: selectedPayment.value,
+    custom_field1: idOvale.value // ← ini yang penting
   }
 })
+
     console.log('Response Midtrans:', response)
 
     if (!response.token) {
