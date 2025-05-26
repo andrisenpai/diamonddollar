@@ -80,7 +80,9 @@ export default defineNuxtConfig({
       'process.env.DEBUG': false
     }
   },
-
+  nitro: {
+    preset: 'vercel' // ✅ ini pakai Node.js lambda, bukan edge
+  },
   imports: {
     dirs: ['store']
   }
