@@ -5,7 +5,7 @@
         <span class="navbar-title">
           <img src="/images/logo.png" alt="Logo" class="logo drop-bounce" />
           <span class="app-name wave-text">
-            <span v-for="(char, index) in 'Shinchan App'" :key="index">{{ char === ' ' ? '\u00A0' : char }}</span>
+            <span v-for="(char, index) in 'ShinoboApp'" :key="index">{{ char === ' ' ? '\u00A0' : char }}</span>
           </span>
 
         </span>
