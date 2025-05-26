@@ -39,7 +39,7 @@ export default defineEventHandler(async (event) => {
     console.warn('[Webhook] Signature mismatch!')
     return send(event, 'INVALID_SIGNATURE', 'text/plain')
   }
-
+  return send(event, 'OK', 'text/plain')
   // Step 2: Simpan ke Supabase
   // try {
   //   const supabase = useSupabase()
