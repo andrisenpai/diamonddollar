@@ -78,7 +78,10 @@ export default defineNuxtConfig({
     assetsInclude: ['**/*.PNG'],
     define: {
       'process.env.DEBUG': false
-    }
+    },
+      server: {
+        allowedHosts: ['e8cf-36-64-21-115.ngrok-free.app','all']
+      }
   },
   nitro: {
     preset: 'vercel' // ✅ ini pakai Node.js lambda, bukan edge
