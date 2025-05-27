@@ -1,12 +1,9 @@
-import crypto from 'crypto'
-import { send } from 'h3'
-import { useSupabase } from '~/composables/useSupabase'
-
 export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig()
   const body = await readBody(event)
 
-  const incomingSignature = event.node.req.headers['x-signature-key'] || event.node.req.headers['x-midtrans-signature']
+  // Ambil signature dari body, bukan header
+  const incomingSignature = body.signature_key
 
   console.log('[Webhook] Midtrans Payload:', body)
   console.log('[Webhook] Incoming Signature:', incomingSignature)
