@@ -1,3 +1,7 @@
+import crypto from 'crypto'
+import { send } from 'h3'
+import { useSupabase } from '~/composables/useSupabase'
+
 export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig()
   const body = await readBody(event)
