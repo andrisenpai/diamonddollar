@@ -6,30 +6,30 @@ export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig()
   const body = await readBody(event)
 
+  const incomingSignature = event.node.req.headers['x-signature-key'] || event.node.req.headers['x-midtrans-signature']
+
   console.log('[Webhook] Midtrans Payload:', body)
+  console.log('[Webhook] Incoming Signature:', incomingSignature)
 
   const {
     order_id,
     status_code,
     gross_amount,
-    signature_key: incomingSignature,
     transaction_status,
     payment_type,
     custom_field1 // user_id
   } = body || {}
 
   if (!order_id || !status_code || !gross_amount || !incomingSignature) {
-    console.warn('[Webhook] Missing fields in payload')
-  
-    // Deteksi jika ini test webhook dari dashboard Midtrans
+    console.warn('[Webhook] Missing fields or signature in payload')
+
     if (order_id === 'test-order-123' || event.node.req.headers['user-agent']?.includes('Midtrans')) {
       console.log('[Webhook] Detected Midtrans test payload')
-      return send(event, 'OK', 'text/plain') // balas sukses agar bisa lewat test
+      return send(event, 'OK', 'text/plain')
     }
-  
+
     return send(event, 'INVALID_PAYLOAD', 'text/plain')
   }
-  
 
   const grossAmountStr = typeof gross_amount === 'string' ? gross_amount : String(gross_amount)
 
@@ -50,7 +50,7 @@ export default defineEventHandler(async (event) => {
     const supabase = useSupabase()
     const user_id = custom_field1 ? parseInt(custom_field1) : null
 
-    const { error, data } = await supabase.from('transactions').upsert({
+    const { error } = await supabase.from('transactions').upsert({
       order_id,
       status: transaction_status,
       payment_type,
