@@ -1,7 +1,7 @@
 <template>
   <div class="mt-4">
     <div v-for="kategori in produk" :key="kategori.nama" class="mb-3">
-      <h5 class="text-success fw-bold mb-2">{{ kategori.nama }}</h5>
+      <h5 class="product-name-category fw-bold mb-2">{{ kategori.nama }}</h5>
       <div class="row g-2">
         <div v-for="item in kategori.items" :key="item" class="col-3">
           <div

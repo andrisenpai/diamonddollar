@@ -9,7 +9,6 @@
 #app-wrapper {
   max-width: 500px;
   margin: 0 auto;
-  background-color: #0f2027;
   color: #b1f2f7;
   min-height: 100vh;
   font-family: 'Source Code Pro', monospace;
