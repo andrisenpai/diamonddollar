@@ -40,6 +40,8 @@ export default defineNuxtConfig({
   runtimeConfig: {
     midtransServerKey: process.env.MIDTRANS_SERVER_KEY,
     public: {
+      SUPABASE_URL: process.env.SUPABASE_URL,
+      SUPABASE_ANON_KEY: process.env.SUPABASE_ANON_KEY,
       midtransClientKey: process.env.MIDTRANS_CLIENT_KEY
     }
   },
@@ -55,9 +57,13 @@ export default defineNuxtConfig({
 
   modules: [
     '@nuxtjs/sitemap',
-    '@nuxtjs/robots'
+    '@nuxtjs/robots',
+    '@pinia/nuxt'
   ],
-
+  pinia: {
+    autoImports: ['defineStore', 'acceptHMRUpdate'],
+    persist: true, // aktifkan persist di config juga
+  },
   sitemap: {
     siteUrl: 'https://shinobo.my.id',
     trailingSlash: false,

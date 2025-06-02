@@ -2,6 +2,7 @@
   <div id="app-wrapper">
     <FloatingSquare />
     <NuxtLayout />
+    <AuthModal />
   </div>
 </template>
 

@@ -9,7 +9,7 @@
           </span>
 
         </span>
-
+        
         <button
           class="menu-btn"
           @click="toggleMenu"
@@ -19,17 +19,24 @@
           <span :class="['hamburger', { open: menuVisible }]"></span>
         </button>
       </div>
-  
+      
       <transition name="slide-fade">
         <div v-if="menuVisible" class="menu-list" role="menu">
           <NuxtLink to="/" class="nav-link" aria-current="page" title="Home">
-        <i class="bi bi-house-door-fill me-2"></i>
-        <span>Home</span>
-      </NuxtLink>
-      <NuxtLink to="/history" class="nav-link" title="Account">
-        <i class="bi bi-clock-history me-2"></i>
-        <span>History</span>
-      </NuxtLink>
+            <i class="bi bi-house-door-fill me-2"></i>
+            <span>Home</span>
+          </NuxtLink>
+          <NuxtLink to="/history" class="nav-link" title="Account">
+            <i class="bi bi-clock-history me-2"></i>
+            <span>History</span>
+          </NuxtLink>
+          <button class="nav-link" data-bs-toggle="modal" data-bs-target="#authModal" v-if="!useUserStore().isAuthentic">
+              👤 Login / Register
+          </button>
+          <button class="nav-link"  v-else>{{ useUserStore().email }}</button>
+          <!-- Tombol Logout -->
+<button class="btn btn-danger nav-link" @click="handleLogout" v-if="useUserStore().isAuthentic">🚪 Logout</button>
+
         </div>
       </transition>
     </nav>
@@ -37,6 +44,27 @@
   
   <script setup>
   import { ref } from 'vue'
+  import UserDetail from './UserDetail.vue';
+  const { supabase } = useSupabase()
+
+import { useAuth } from '~/composables/useAuth'
+
+const { logout } = useAuth()
+
+const handleLogout = async () => {
+  try {
+    await logout()
+    const userStore = useUserStore()
+userStore.clearUser()
+
+    // Setelah logout sukses, redirect ke halaman utama
+    window.location.href = '/'
+  } catch (error) {
+    console.error('Gagal logout:', error)
+  }
+}
+
+
   const menuVisible = ref(false)
   function toggleMenu() {
     menuVisible.value = !menuVisible.value
@@ -86,7 +114,7 @@
 .wave-text {
   display: inline-block;
   white-space: nowrap;
-  font-size: 1.4rem;
+  font-size: 1.2rem;
   font-weight: bold;
   letter-spacing: 0.08em;
 }

@@ -1,8 +1,8 @@
+// composables/useSupabase.ts
 import { createClient } from '@supabase/supabase-js'
 
-const supabaseUrl = process.env.SUPABASE_URL!
-const supabaseAnonKey = process.env.SUPABASE_ANON_KEY!
-
 export const useSupabase = () => {
-  return createClient(supabaseUrl, supabaseAnonKey)
+  const config = useRuntimeConfig()
+  const supabase = createClient(config.public.SUPABASE_URL, config.public.SUPABASE_ANON_KEY)
+  return { supabase }
 }
