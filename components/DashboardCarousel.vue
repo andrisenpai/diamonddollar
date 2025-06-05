@@ -7,10 +7,10 @@
         :class="['carousel-item', { active: index === 0 }]"
       >
         <img :src="item.image" class="d-block w-100" :alt="item.title" />
-        <div class="carousel-caption d-none d-md-none d-lg-block">
-          <h5>{{ item.title }}</h5>
-          <p>{{ item.description }}</p>
-        </div>
+        <!-- <div class="carousel-caption d-none d-md-none d-lg-block"> -->
+          <!-- <h5>{{ item.title }}</h5> -->
+          <!-- <p>{{ item.description }}</p> -->
+        <!-- </div> -->
       </div>
     </div>
 

@@ -33,7 +33,7 @@ const router = useRouter()
 
 const produk = [
   { nama: 'Topup Koin', items: ['Ovale', 'Hita', 'Supermeet', 'Hago'] },
-  { nama: 'Topup Game', items: ['Mobile Legend', 'Pubg Mobile'] },
+  { nama: 'Topup Game', items: ['Mobile Legend', 'Pubg Mobile', 'Free Fire'] },
   { nama: 'Topup Pulsa & Kuota', items: ['Pulsa', 'Kuota'] },
   { nama: 'Topup E-wallet', items: ['Dana', 'Ovo', 'Link'] },
 ]

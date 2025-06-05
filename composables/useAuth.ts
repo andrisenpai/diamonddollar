@@ -12,12 +12,14 @@ export const useAuth = () => {
     const { data, error } = await supabase.auth.signInWithPassword({ email, password })
     if (error) throw error
 
-    if (data?.user) {
-      user.value = data.user
-      userStore.setUser({ id: data.user.id, email: data.user.email })
+    const u = data?.user
+    if (u) {
+      const role = u.user_metadata?.role ?? 'user' // default role = user
+      user.value = u
+      userStore.setUser({ id: u.id, email: u.email, role })
     }
 
-    return data.user
+    return u
   }
 
   const logout = async () => {
@@ -34,19 +36,20 @@ export const useAuth = () => {
     user.value = u
 
     if (u) {
-      userStore.setUser({ id: u.id, email: u.email })
+      const role = u.user_metadata?.role ?? 'user'
+      userStore.setUser({ id: u.id, email: u.email, role })
     } else {
       userStore.clearUser()
     }
   }
 
-  // Supabase realtime session sync
   supabase.auth.onAuthStateChange((_event, session) => {
     const u = session?.user ?? null
     user.value = u
 
     if (u) {
-      userStore.setUser({ id: u.id, email: u.email })
+      const role = u.user_metadata?.role ?? 'user'
+      userStore.setUser({ id: u.id, email: u.email, role })
     } else {
       userStore.clearUser()
     }
