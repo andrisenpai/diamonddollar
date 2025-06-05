@@ -146,12 +146,11 @@ userStore.clearUser()
 
   .robot-navbar {
     max-width: 500px;
-    margin: 5px auto!important;
+    margin: 0 auto!important;
     background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
     color: #b1f2f7;
-    font-family: 'Source Code Pro', monospace, monospace;
     box-shadow: 0 4px 15px rgba(0, 255, 240, 0.25);
-    border-radius: 8px;
+    border-radius: 2px;
     padding: 0.25rem 1rem;
     user-select: none;
   }

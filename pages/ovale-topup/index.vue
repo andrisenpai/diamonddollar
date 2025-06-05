@@ -258,7 +258,6 @@ const submitTopup = async () => {
     color: #b1f2f7;
     padding: 1rem;
     min-height: 100vh;
-    font-family: 'Source Code Pro', monospace;
   }
   
   .logo-section {

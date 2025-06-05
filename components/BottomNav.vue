@@ -29,7 +29,6 @@
     align-items: center;
     padding: 0.5rem 0;
     border-radius: 12px 12px 0 0;
-    font-family: 'Source Code Pro', monospace, monospace;
     z-index: 1000;
     user-select: none;
   }

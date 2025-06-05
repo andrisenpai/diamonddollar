@@ -1,18 +1,50 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&display=swap');
+
 body {
-    background-color: #0a141e;
-    font-family: 'Source Code Pro', monospace;
-    color: #b1f2f7;
-    margin: 0;
-  }
-  .product-name-category{
-    color: #b1f2f7;
-  }
-  a {
-    text-decoration: none;
-    color: inherit;
-  }
-  
-  * {
-    box-sizing: border-box;
-  }
-  
+  background-color: #0a141e;
+  font-family: 'Orbitron', sans-serif;
+  color: #b1f2f7;
+  margin: 0;
+  letter-spacing: 0.5px;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.product-name-category {
+  color: #b1f2f7;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.bg-product-menu {
+  background-color: #0a141e !important;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.card.robotic-card {
+  background-color: #121e2d;
+  border: 1px solid #1c2b3a;
+  border-radius: 12px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card.robotic-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 0 15px rgba(177, 242, 247, 0.4);
+}
+
+.robotic-text {
+  font-size: 14px;
+  color: #b1f2f7;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}

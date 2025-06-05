@@ -1,12 +1,10 @@
 <template>
-    <div class="container my-2">
+    <div class="container my-3">
       <ClientOnly>
         <DashboardCarousel />
       </ClientOnly>
       
       <section class="text-center">
-        <h2 class="my-2" style="font-size: var(--font-title);">Selamat datang</h2>
-        <p style="font-size: var(--font-body);">Gunakan menu di bawah untuk menjelajahi fitur aplikasi.</p>
       </section>
   
       <MenuProduk />

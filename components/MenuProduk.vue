@@ -1,24 +1,22 @@
 <template>
-  <div class="container py-2 robotic-bg text-robotic-text min-vh-100">
+  <div class="container py-1 mt-3 robotic-bg text-robotic-text min-vh-100">
     <div v-for="kategori in produk" :key="kategori.nama" class="mb-2">
       <h5 class="fw-bold robotic-title mb-3">{{ kategori.nama }}</h5>
-      <div class="row g-1">
+      <div class="row g-1 bg-product-menu">
         <div
           v-for="item in kategori.items"
           :key="item"
-          class="col-4 col-sm-4 col-md-3"
+          class="col-3 col-sm-3 col-md-3"
         >
           <div
-            class="card robotic-card shadow-sm text-center h-100 p-3 cursor-pointer"
+            class="card robotic-card shadow-sm text-center h-100 p-2 cursor-pointer"
             @click="goToPage(item)"
           >
             <img
               :src="getImgSrc(item)"
               :alt="item"
-              class="mx-auto robotic-img mb-3"
+              class="mx-auto robotic-img img-fluid"
               loading="lazy"
-              width="80"
-              height="80"
             />
             <span class="fw-semibold robotic-text">{{ item }}</span>
           </div>
@@ -34,7 +32,7 @@ const {ensureAuth} = useRequireAuth()
 const router = useRouter()
 
 const produk = [
-  { nama: 'Topup Koin', items: ['Ovale', 'Hita', 'Supermeet'] },
+  { nama: 'Topup Koin', items: ['Ovale', 'Hita', 'Supermeet', 'Hago'] },
   { nama: 'Topup Game', items: ['Mobile Legend', 'Pubg Mobile'] },
   { nama: 'Topup Pulsa & Kuota', items: ['Pulsa', 'Kuota'] },
   { nama: 'Topup E-wallet', items: ['Dana', 'Ovo', 'Link'] },
@@ -64,12 +62,12 @@ const getImgSrc = (item) => {
   --robotic-card-bg: #112233;
   --robotic-card-hover-shadow: 0 0 15px 3px #00d8ff88;
   --robotic-cursor: pointer;
-  --robotic-font-family: 'Source Code Pro', monospace;
 }
-
+.bg-product-menu{
+  background-color: rgba(255, 255, 255, 0.1)!important;
+}
 .robotic-bg {
   background-color: var(--robotic-bg);
-  font-family: var(--robotic-font-family);
   color: var(--robotic-text);
   min-height: 100vh;
 }
