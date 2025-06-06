@@ -1,6 +1,8 @@
 <template>
     <div class="spin-wrapper">
+      
       <h2 class="title">Spin Hadiah</h2>
+      <p v-if="result" class="result">🎉 Kamu dapat: <strong>{{ result }}</strong></p>
       <div class="wheel-container">
         <div class="wheel" :style="{ transform: `rotate(${rotation}deg)` }">
           <div
@@ -17,13 +19,31 @@
       <button class="spin-button" @click="spin" :disabled="spinning">
         {{ spinning ? 'Memutar...' : 'SPIN SEKARANG' }}
       </button>
-      <p v-if="result" class="result">🎉 Kamu dapat: <strong>{{ result }}</strong></p>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-body">
+            <p v-if="result" class="result">🎉 Kamu dapat: <strong>{{ result }}</strong> {{ name }}</p>
+            <img src="/monyet.jpg" class="img-fluid rounded w-50" alt="">
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Spin Ulang</button>
+          </div>
+        </div>
+      </div>
     </div>
   </template>
   
   <script setup>
+  const { $bootstrap } = useNuxtApp()
 import { ref } from 'vue'
-
+function showPrizeModal(newPrize) {
+  prize.value = newPrize
+  modalOpen.value = true
+}
 const prizes = [
   'Koin 500K',
   'Coba Lagi',
@@ -32,12 +52,21 @@ const prizes = [
   'Koin 100K',
   'Coba Lagi',
 ]
-const probabilities = [0.0001, 30, 0.0001, 30, 0.1, 30]
-const spinning = ref(true)
+const probabilities = [0, 35, 0, 35, 0, 30]
+const spinning = ref(false)
 const result = ref('')
 const rotation = ref(0)
 
 const segmentAngle = 360 / prizes.length
+const showModal = () => {
+  if (process.client) {
+    const modalEl = document.getElementById('staticBackdrop')
+    if (modalEl) {
+      const modalInstance = $bootstrap.Modal.getInstance(modalEl) || new $bootstrap.Modal(modalEl)
+      modalInstance.show()
+    }
+  }
+}
 function getRandomIndexByProbability(probs) {
   const random = Math.random() * 100
   let sum = 0
@@ -73,6 +102,7 @@ function spin() {
   setTimeout(() => {
     result.value = prizes[winnerIndex]
     spinning.value = false
+    showModal()
   }, 5000) // Pastikan durasi ini sesuai dengan CSS transition
 }
 
@@ -187,5 +217,54 @@ function getLabelStyle(index) {
     color: #ffffff;
     text-shadow: 0 0 5px lime;
   }
+  .modal-content {
+  background: #111827; /* dark navy */
+  color: #ffffff;
+  border: 2px solid #06b6d4; /* cyan border */
+  box-shadow: 0 0 20px #06b6d4; /* neon glow */
+  border-radius: 12px;
+}
+
+.modal-body {
+  text-align: center;
+  padding: 2rem 1rem;
+}
+
+.modal-body .result {
+  font-size: 1.25rem;
+  color: #67e8f9; /* light cyan */
+  text-shadow: 0 0 5px #22d3ee;
+}
+
+.modal-footer {
+  border-top: 1px solid #0f172a;
+  background-color: #0f172a;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.modal-footer .btn-secondary {
+  background-color: #1e293b;
+  color: #ffffff;
+  border: 1px solid #334155;
+}
+
+.modal-footer .btn-secondary:hover {
+  background-color: #334155;
+}
+
+.modal-footer .btn-primary {
+  background-color: #06b6d4;
+  border: none;
+  color: #0f172a;
+  font-weight: bold;
+  box-shadow: 0 0 8px #22d3ee;
+}
+
+.modal-footer .btn-primary:hover {
+  background-color: #22d3ee;
+  color: #0f172a;
+}
   </style>
-  
