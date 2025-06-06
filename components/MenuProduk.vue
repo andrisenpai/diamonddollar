@@ -1,7 +1,7 @@
 <template>
-  <div class="container py-1 mt-3 robotic-bg text-robotic-text min-vh-100">
+  <div class="container py-1 mt-3 robotic-bg text-robotic-text">
     <div v-for="kategori in produk" :key="kategori.nama" class="mb-2">
-      <h5 class="fw-bold robotic-title mb-3">{{ kategori.nama }}</h5>
+      <h5 class="fw-bold robotic-title">{{ kategori.nama }}</h5>
       <div class="row g-1 bg-product-menu">
         <div
           v-for="item in kategori.items"
@@ -15,7 +15,7 @@
             <img
               :src="getImgSrc(item)"
               :alt="item"
-              class="mx-auto robotic-img img-fluid"
+              class="mx-auto robotic-img"
               loading="lazy"
             />
             <span class="fw-semibold robotic-text">{{ item }}</span>
@@ -32,8 +32,8 @@ const {ensureAuth} = useRequireAuth()
 const router = useRouter()
 
 const produk = [
-  { nama: 'Topup Koin', items: ['Ovale', 'Hita', 'Supermeet', 'Hago'] },
   { nama: 'Topup Game', items: ['Mobile Legend', 'Pubg Mobile', 'Free Fire'] },
+  { nama: 'Topup Koin', items: ['Ovale', 'Hita', 'Supermeet', 'Hago'] },
   { nama: 'Topup Pulsa & Kuota', items: ['Pulsa', 'Kuota'] },
   { nama: 'Topup E-wallet', items: ['Dana', 'Ovo', 'Link'] },
 ]
@@ -64,12 +64,12 @@ const getImgSrc = (item) => {
   --robotic-cursor: pointer;
 }
 .bg-product-menu{
-  background-color: rgba(255, 255, 255, 0.1)!important;
+  /* background-color: rgba(255, 255, 255, 0.1)!important; */
 }
 .robotic-bg {
   background-color: var(--robotic-bg);
   color: var(--robotic-text);
-  min-height: 100vh;
+  /* min-height: 100vh; */
 }
 
 .robotic-title {
@@ -78,6 +78,7 @@ const getImgSrc = (item) => {
   text-transform: uppercase;
   font-weight: 900;
   user-select: none;
+  font-size: 0.9rem;
 }
 
 .robotic-card {
@@ -98,15 +99,17 @@ const getImgSrc = (item) => {
 }
 
 .robotic-img {
-  width: 80px;
-  height: 80px;
+  width: 60px;
+  height: 60px;
   object-fit: contain;
   pointer-events: none;
   user-select: none;
+  border-radius: 5px;
+  margin-bottom: 5px;
 }
 
 .robotic-text {
-  font-size: 1rem;
+  font-size: 0.5rem;
   font-weight: 600;
   user-select: none;
   white-space: nowrap;

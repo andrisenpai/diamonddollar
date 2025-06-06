@@ -22,20 +22,32 @@
       
       <transition name="slide-fade">
         <div v-if="menuVisible" class="menu-list" role="menu">
-          <NuxtLink to="/" class="nav-link" aria-current="page" title="Home">
-            <i class="bi bi-house-door-fill me-2"></i>
-            <span>Home</span>
-          </NuxtLink>
-          <NuxtLink to="/history" class="nav-link" title="Account">
-            <i class="bi bi-clock-history me-2"></i>
-            <span>History</span>
-          </NuxtLink>
-          <button class="nav-link" data-bs-toggle="modal" data-bs-target="#authModal" v-if="!useUserStore().isAuthentic">
-              👤 Login / Register
-          </button>
-          <button class="nav-link"  v-else>{{ useUserStore().email }}</button>
-          <!-- Tombol Logout -->
-<button class="btn btn-danger nav-link" @click="handleLogout" v-if="useUserStore().isAuthentic">🚪 Logout</button>
+          <NuxtLink to="/" class="nav-link" @click="menuVisible = false" aria-current="page" title="Home">
+  <i class="bi bi-house-door-fill me-2"></i>
+  <span>Home</span>
+</NuxtLink>
+
+<NuxtLink to="/history" class="nav-link" @click="menuVisible = false" title="Account">
+  <i class="bi bi-clock-history me-2"></i>
+  <span>History</span>
+</NuxtLink>
+
+<button class="nav-link" data-bs-toggle="modal" data-bs-target="#authModal"
+  v-if="!useUserStore().isAuthentic"
+  @click="menuVisible = false">
+  👤 Login / Register
+</button>
+
+<button class="nav-link" v-else @click="menuVisible = false">
+  {{ useUserStore().email }}
+</button>
+
+<!-- Tombol Logout -->
+<button class="btn btn-danger nav-link"
+  @click="() => { handleLogout(); menuVisible = false }"
+  v-if="useUserStore().isAuthentic">
+  🚪 Logout
+</button>
 
         </div>
       </transition>
@@ -167,7 +179,10 @@ userStore.clearUser()
     letter-spacing: 0.1em;
     text-shadow: 0 0 6px #00fff7, 0 0 10px #00fff7;
   }
-  
+  .nav-link{
+    font-size: 0.9rem;
+    text-transform: uppercase;
+  }
   .menu-btn {
     background: transparent;
     border: none;

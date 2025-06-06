@@ -11,7 +11,7 @@
   max-width: 500px;
   margin: 0 auto;
   color: #b1f2f7;
-  min-height: 100vh;
+  /* min-height: 100vh; */
   padding-bottom: 70px; /* biar gak ketutupan bottom nav */
 }
 </style>

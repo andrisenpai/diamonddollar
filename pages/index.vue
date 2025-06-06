@@ -1,13 +1,14 @@
 <template>
     <div class="container my-3">
+      
       <ClientOnly>
         <DashboardCarousel />
       </ClientOnly>
       
       <section class="text-center">
       </section>
-  
       <MenuProduk />
+  
     </div>
   </template>
   
