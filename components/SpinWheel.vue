@@ -30,7 +30,7 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary">Spin Ulang</button>
+            <button type="button" class="btn btn-primary" @click="spin" data-bs-dismiss="modal">Spin Ulang</button>
           </div>
         </div>
       </div>
