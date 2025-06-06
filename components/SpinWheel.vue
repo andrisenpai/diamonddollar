@@ -32,7 +32,7 @@ const prizes = [
   'Koin 100K',
   'Coba Lagi',
 ]
-const probabilities = [1, 25, 1, 25, 1, 25]
+const probabilities = [0, 25, 0, 25, 0.5, 25]
 const spinning = ref(false)
 const result = ref('')
 const rotation = ref(0)
