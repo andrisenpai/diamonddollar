@@ -1,7 +1,4 @@
 <template>
-  <div class="info p-2 m-1 text-center text-dark bg-info">
-    Kamu main ovale? yuk ikuti event berhadiah, Hadiah akan di bagikan tanggal 1 Agustus 2025 ! Yok spin sekarang juga ! <nuxt-link to="/spin-lucky-price" class="btn btn-secondary">Lucky wheel</nuxt-link>
-  </div>
   <div id="carouselDashboard" class="carousel slide" data-bs-ride="carousel">
     <div class="carousel-inner">
       <div
