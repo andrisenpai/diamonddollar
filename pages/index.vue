@@ -16,7 +16,9 @@
   import DashboardCarousel from '~/components/DashboardCarousel.vue'
   import MenuProduk from '~/components/MenuProduk.vue'
   onMounted(() => {
-
+    if (!useUserStore().isAuthentic) {
+      
+    }
   })
   </script>
   

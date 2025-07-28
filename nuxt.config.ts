@@ -39,6 +39,7 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     midtransServerKey: process.env.MIDTRANS_SERVER_KEY,
+    SUPABASE_SERVER_KEY: process.env.SUPABASE_SERVICE_ROLE,
     public: {
       SUPABASE_URL: process.env.SUPABASE_URL,
       SUPABASE_ANON_KEY: process.env.SUPABASE_ANON_KEY,

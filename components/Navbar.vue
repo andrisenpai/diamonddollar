@@ -5,7 +5,7 @@
         <span class="navbar-title">
           <img src="/images/logo.png" alt="Logo" class="logo drop-bounce" />
           <span class="app-name wave-text">
-            <span v-for="(char, index) in 'shinobo.my.id'" :key="index">{{ char === ' ' ? '\u00A0' : char }}</span>
+            <span v-for="(char, index) in 'shinobo.com'" :key="index">{{ char === ' ' ? '\u00A0' : char }}</span>
           </span>
 
         </span>
@@ -27,9 +27,9 @@
   <span>Home</span>
 </NuxtLink>
 
-<NuxtLink to="/history" class="nav-link" @click="menuVisible = false" title="Account">
-  <i class="bi bi-clock-history me-2"></i>
-  <span>History</span>
+<NuxtLink to="/profile" class="nav-link" @click="menuVisible = false" title="Account">
+  <i class="bi bi-person-check me-2"></i>
+  <span>Account</span>
 </NuxtLink>
 
 <button class="nav-link" data-bs-toggle="modal" data-bs-target="#authModal"

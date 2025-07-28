@@ -26,7 +26,8 @@
         <div class="modal-content">
           <div class="modal-body">
             <p v-if="result" class="result">🎉 Kamu dapat: <strong>{{ result }}</strong> {{ name }}</p>
-            <img src="/monyet.jpg" class="img-fluid rounded w-50" alt="">
+            <img v-if="result == 'Coba Lagi'" src="/monyet.jpg" class="img-fluid rounded w-50" alt="">
+            <img v-else src="/shinchan.jpg" class="img-fluid rounded w-50" alt="">
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -52,7 +53,7 @@ const prizes = [
   'Koin 100K',
   'Coba Lagi',
 ]
-const probabilities = [0, 35, 0, 35, 0.01, 30]
+const probabilities = [0, 35, 0, 35, 0.3, 30]
 const spinning = ref(false)
 const result = ref('')
 const rotation = ref(0)

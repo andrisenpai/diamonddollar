@@ -18,6 +18,24 @@
 
         <div class="modal-body">
           <form @submit.prevent="handleSubmit" class="d-grid gap-3">
+            <!-- 👇 hanya muncul saat Register -->
+<input
+  type="text"
+  v-model="nama"
+  class="form-control robot-input"
+  placeholder="🧑 Nama Lengkap"
+  required
+  v-if="!isLogin"
+/>
+<input
+  type="text"
+  v-model="noHp"
+  class="form-control robot-input"
+  placeholder="📱 No HP"
+  required
+  v-if="!isLogin"
+/>
+
             <input
               type="email"
               v-model="email"
@@ -41,7 +59,7 @@
 
             <div class="text-center text-muted">or</div>
 
-            <button type="button" class="btn btn-outline-secondary w-100" @click="signInWithGoogle">
+            <button type="button" class="btn btn-outline-secondary w-100 disabled" @click="signInWithGoogle">
               🔗 Login with Google <span v-if="isLoading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
 
             </button>
@@ -77,6 +95,9 @@ const { supabase } = useSupabase()
 const isLogin = ref(true)
 const email = ref('')
 const password = ref('')
+const nama = ref('')
+const noHp = ref('')
+
 const error = ref('')
 const isLoading = ref(false)
 
@@ -87,27 +108,41 @@ const handleSubmit = async () => {
   isLoading.value = true
 
   try {
-    let userData
-    if (isLogin.value) {
-      userData = await login(email.value, password.value)
-    } else {
-      const { data, error: err } = await supabase.auth.signUp({
-        email: email.value,
-        password: password.value,
-      })
-      if (err) throw err
-      userData = data.user
-    }
+  let userData
 
-    if (userData) {
-      closeModal()
-      resetForm()
-    }
-  } catch (err: any) {
-    error.value = err.message || 'Login/Register gagal'
-  } finally {
-    isLoading.value = false
+  if (isLogin.value) {
+    userData = await login(email.value, password.value)
+  } else {
+    const { data, error: err } = await supabase.auth.signUp({
+    email: email.value,
+    password: password.value,
+  })
+
+  if (err) throw err
+  userData = data.user
+
+  // Tambahkan data ke tabel profiles
+  if (userData) {
+    const { error: profileError } = await supabase.from('profiles').insert({
+      id: userData.id,
+      nama: nama.value,
+      no_hp: noHp.value,
+      jumlah_spin: 0,
+    })
+    if (profileError) throw profileError
   }
+  }
+
+  if (userData) {
+    closeModal()
+    resetForm()
+  }
+} catch (err: any) {
+  error.value = err.message || 'Login/Register gagal'
+} finally {
+  isLoading.value = false
+}
+
 }
 
 
@@ -124,12 +159,15 @@ const toggleForm = () => {
   error.value = ''
 }
 
-const resetForm = () => {
+  const resetForm = () => {
   email.value = ''
   password.value = ''
+  nama.value = ''
+  noHp.value = ''
   error.value = ''
   isLogin.value = true
 }
+
 
 const closeModal = () => {
   if (process.client) {
@@ -144,33 +182,82 @@ const closeModal = () => {
 
 
 <style scoped>
-/* 🔧 Tema robotik Shinchan App */
 .robot-ui {
-  background: linear-gradient(145deg, #1e1e2f, #2b2b3c);
-  border: 1px solid #4a4a5f;
+  background: linear-gradient(145deg, #0f1924, #1a2735);
+  border: 1px solid #1e2f3e;
   border-radius: 1rem;
-  color: #d0d0ff;
+  color: #b1f2f7;
+  box-shadow: 0 0 20px rgba(177, 242, 247, 0.1);
+  font-family: 'Orbitron', sans-serif;
 }
 
 .robot-input {
-  background-color: #2a2a3c;
-  border: 1px solid #505070;
-  color: #fff;
+  background-color: #121e2d;
+  border: 1px solid #1c2b3a;
+  color: #b1f2f7;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 14px;
+  letter-spacing: 0.5px;
+  padding: 0.6rem 1rem;
+}
+
+.robot-input::placeholder {
+  color: #6c9daf;
 }
 
 .robot-input:focus {
-  border-color: #71c7ec;
-  box-shadow: 0 0 0 0.25rem rgba(113, 199, 236, 0.25);
+  border-color: #00ffff;
+  box-shadow: 0 0 0 0.25rem rgba(0, 255, 255, 0.15);
+  background-color: #0a141e;
+  color: #ffffff;
 }
 
 .robot-btn {
-  background: linear-gradient(to right, #6366f1, #3b82f6);
+  background: linear-gradient(to right, #00d9ff, #00f2ff);
   border: none;
-  color: white;
-  font-weight: bold;
+  color: #0a141e;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-family: 'Orbitron', sans-serif;
+  transition: all 0.3s ease;
+  letter-spacing: 1px;
 }
 
 .robot-btn:hover {
-  background: linear-gradient(to right, #4f46e5, #2563eb);
+  background: linear-gradient(to right, #00a6ff, #00e5ff);
+  box-shadow: 0 0 10px rgba(0, 255, 255, 0.4);
+}
+
+.btn-outline-secondary {
+  border: 1px solid #00d9ff;
+  color: #00d9ff;
+  font-weight: bold;
+  font-family: 'Orbitron', sans-serif;
+  transition: all 0.3s ease;
+}
+
+.btn-outline-secondary:hover {
+  background-color: #00d9ff;
+  color: #0a141e;
+}
+
+.modal-title {
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 700;
+  color: #00f2ff;
+  letter-spacing: 1px;
+}
+
+.text-muted {
+  color: #6c9daf !important;
+}
+
+a.text-primary {
+  color: #00e1ff !important;
+}
+
+a.text-primary:hover {
+  text-decoration: underline;
 }
 </style>
+

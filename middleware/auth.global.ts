@@ -1,7 +1,7 @@
 export default defineNuxtRouteMiddleware(async (to) => {
     if (process.server) return
   
-    const publicPages = ['/', '/login', '/register','/spin-lucky-price'] // Halaman yang tidak butuh login
+    const publicPages = ['/', '/login', '/register'] // Halaman yang tidak butuh login
   
     if (publicPages.includes(to.path)) return // Jangan blokir halaman publik
   
