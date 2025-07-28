@@ -18,6 +18,7 @@
   import DashboardCarousel from '~/components/DashboardCarousel.vue'
   import MenuProduk from '~/components/MenuProduk.vue'
   const {ensureAuth} = useRequireAuth()
+  const router = useRouter()
   const goToPage = () => {
   const path = `/spin-lucky-price`
   ensureAuth(() => {
